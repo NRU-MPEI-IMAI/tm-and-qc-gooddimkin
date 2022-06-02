@@ -1,0 +1,59 @@
+# Поиск минимального по длине слова в строке (слова состоят из 0, 1 и разделены пробелом)
+
+# Алгоритм переводит головку машины на начало минимального слова. При этом найденное слово остается без изменений, а в остальных словах 0 и 1 могут быть изменены на x и y соответственно. Если в строке есть несколько минимальных слов, то результат неоднозначен: будет выбрано либо первое (нечетная длина слова), либо последнее (четная длина слова).
+
+# Тесты:
+# '0 10' -> '0'
+# '01 10' -> '10'
+# '010 10' -> '10'
+# '010 11 101' -> '11'
+
+input: '01 10'
+blank: ' '
+
+start state: search
+table:
+  search:
+    '0': {write: 'x', R: checkWord}
+    '1': {write: 'y', R: checkWord}
+    'x': R
+    'y': R
+    ' ': {L: nextWordBack}
+  searchBack:
+    '0': {write: 'x', L: checkWordBack}
+    '1': {write: 'y', L: checkWordBack}
+    'x': L
+    'y': L
+    ' ': {R: nextWord}
+  checkWord:
+    '0': {R: nextWord}
+    '1': {R: nextWord}
+    'x': {R: resultFromCenter}
+    'y': {R: resultFromCenter}
+    ' ': {L: resultRightToLeft}
+  checkWordBack:
+    '0': {L: nextWordBack}
+    '1': {L: nextWordBack}
+    'x': {R: resultFromCenter}
+    'y': {R: resultFromCenter}
+  nextWord:
+    '0': R
+    '1': R
+    'x': R
+    'y': R
+    ' ': {R: search}
+  nextWordBack:
+    '0': L
+    'x': L
+    '1': L
+    'y': L
+    ' ': {L: searchBack}
+  resultFromCenter:
+    'x': R
+    'y': R
+    ' ': {L: resultRightToLeft}
+  resultRightToLeft:
+    'x': {write: '0', L}
+    'y': {write: '1', L}
+    ' ': {R: done}
+  done:

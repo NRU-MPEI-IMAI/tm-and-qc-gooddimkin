@@ -1,0 +1,65 @@
+# Умножение двух унарных чисел
+# Тесты: '||*||', '|*||', '*|||', '||*'
+
+# TODO: сделать понятные имена состояний, maybe optimize?
+
+input: '|*||'
+blank: ' '
+
+start state: q0
+table:
+  q0:
+    '|': R
+    '*': {R: q1}
+  q1:
+    '|': R
+    ' ': {write: '*', L: q2}
+  q2:
+    '|': L
+    '*': {R: q3}
+  q3:
+    'x': R
+    '|': {write: 'x', L: q4}
+    '*': {R: clear1}
+  clear1:
+    ' ': {L: clear2}
+    '|': {L: clear3}
+  clear2:
+    'x': {write: ' ', L}
+    '*': {write: ' ', L}
+    '|': {write: ' ', L}
+    ' ': {R: done}
+  clear3:
+    'x': {write: ' ', L}
+    '*': {write: ' ', L}
+    '|': {write: ' ', L}
+    ' ': {R: backToResult}
+  backToResult:
+    ' ': R
+  q4:
+    'x': L
+    '*': {write: '*', L: q5}
+  q5:
+    'y': L
+    '|': {write: 'y', R: q6}
+    ' ': {R: q11}
+  q6:
+    'y': R
+    '*': {R: q7}
+  q7:
+    '|': R
+    'x': R
+    '*': {R: q8}
+  q8:
+    '|': R
+    ' ': {write: '|', L: q9}
+  q9:
+    '|': L
+    '*': {L: q10}
+  q10:
+    '|': L
+    'x': L
+    '*': {L: q5}
+  q11:
+    'y': {write: '|', R}
+    '*': {R: q3}

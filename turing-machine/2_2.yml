@@ -1,0 +1,53 @@
+# Правильная скобочная последовательность (3 вида скобок)
+# Тесты:
+# ' ' -> accept
+# '()' -> accept
+# '({})' -> accept
+# '(([]))({()})' -> accept
+# '({)}' -> reject
+# '()][' -> reject
+# '{[(([]}' -> reject
+
+input: '({})'
+blank: ' '
+
+start state: q0
+table:
+  q0:
+    '(': R
+    '[': R
+    '{': R
+    ')': {write: 'x', L: 'search('}
+    ']': {write: 'x', L: 'search['}
+    '}': {write: 'x', L: 'search{'}
+    'x': R
+    ' ': {R: accept}
+  'search(':
+    'x': L
+    '(': {write: 'x', L: back}
+    '[': {R: reject}
+    '{': {R: reject}
+    ' ': {R: reject}
+  'search[':
+    'x': L
+    '(': {R: reject}
+    '[': {write: 'x', L: back}
+    '{': {R: reject}
+    ' ': {R: reject}
+  'search{':
+    'x': L
+    '(': {R: reject}
+    '[': {R: reject}
+    '{': {write: 'x', L: back}
+    ' ': {R: reject}
+  back:
+    '(': {R: q0}
+    '[': {R: q0}
+    '{': {R: q0}
+    ')': {write: 'x', L: 'search('}
+    ']': {write: 'x', L: 'search['}
+    '}': {write: 'x', L: 'search{'}
+    'x': {R: q0}
+    ' ': {R: q0}
+  accept:
+  reject:

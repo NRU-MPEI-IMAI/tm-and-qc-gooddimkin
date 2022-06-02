@@ -1,0 +1,47 @@
+# L = {0^n1^n2^n}, n >= 0
+# Тесты:
+# ' ' -> accept
+# '012' -> accept
+# '001122' -> accept
+# '00112' -> reject
+# '0112' -> reject
+# '00122' -> reject
+
+input: '012'
+blank: ' '
+
+start state: one
+table:
+  one:
+    ' ': {R: accept}
+    '0': {write: 'x', R: two}
+    '1': {R: reject}
+  two:
+    '0': R
+    'y': R
+    '1': {write: 'y', R: three}
+    'z': {R: reject}
+    '2': {R: reject}
+  three:
+    '1': R
+    'z': R
+    '2': {write: 'z', L: back}
+    ' ': {R: reject}
+  back:
+    '0': L
+    'x': L
+    '1': L
+    'y': L
+    '2': L
+    'z': L
+    ' ': {R: check}
+  check:
+    'x': R
+    'y': R
+    'z': R
+    ' ': {R: accept}
+    '0': {write: 'x', R: two}
+    '1': {R: reject}
+    '2': {R: reject}
+  accept:
+  reject:

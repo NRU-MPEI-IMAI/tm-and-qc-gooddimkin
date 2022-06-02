@@ -1,0 +1,20 @@
+# Сложение двух унарных чисел
+# Тесты: '||+|||', '+||', '|+'
+
+input: '||+|||' 
+blank: ' '
+
+start state: q0
+table:
+  q0:
+    '|': {write: ' ', R: to end}
+    '+': {write: ' ', R: done}
+  to end:
+    '|': R
+    '+': R
+    ' ': {write: '|', L: to start}
+  to start:
+    '|': L
+    '+': L
+    ' ': {R: q0}
+  done:
